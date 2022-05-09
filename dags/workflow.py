@@ -92,7 +92,7 @@ with models.DAG(
         sql='sql/main.sql',
         params={'SOURCE_TABLE_NAME': f'{PROJECT}.{SOURCE_DATASET_ID}.access-log-{day:%Y%m%d}',
                 'DWH_TABLE_NAME': f'{PROJECT}.{DWH_DATASET_ID}.daily_pv',
-                'target_day': day}
+                'TARGET_DAY': day}
     )
 
     Extract_file >> Load_table >> Transfer_data
