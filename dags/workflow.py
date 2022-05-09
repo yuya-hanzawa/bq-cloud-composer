@@ -7,11 +7,11 @@ from airflow import models
 from airflow.operators.python_operator import PythonOperator
 from airflow.contrib.operators.bigquery_operator import BigQueryOperator
 
-PROJECT_ID        = models.Variable.get('PROJECT_ID')
+PROJECT        = models.Variable.get('PROJECT')
 SOURCE_DATASET_ID = models.Variable.get('SOURCE_DATASET_ID')
 DWH_DATASET_ID    = models.Variable.get('DWH_DATASET_ID')
 BUCKET            = models.Variable.get('BUCKET')
-PORT              = models.Variable.get('PORT')
+SERVER_PORT       = models.Variable.get('SERVER_PORT')
 USERNAME          = models.Variable.get('USERNAME')
 PASSWORD          = models.Variable.get('PASSWORD')
 
@@ -24,7 +24,7 @@ def extract_file_from_server_to_gcs():
         ssh.set_missing_host_key_policy(AutoAddPolicy())
 
         ssh.connect(hostname='yuya-hanzawa.com', 
-                    port=PORT, 
+                    port=SERVER_PORT, 
                     username=USERNAME,
                     password=PASSWORD
                     )
@@ -32,13 +32,13 @@ def extract_file_from_server_to_gcs():
         with SCPClient(ssh.get_transport()) as scp:
             scp.get(f'/var/log/nginx/{file_name}', '/tmp/')
 
-    gcs = storage.Client(PROJECT_ID)
+    gcs = storage.Client(PROJECT)
     bucket = gcs.get_bucket(BUCKET)
     blob = bucket.blob(file_name)
     blob.upload_from_filename(f'/tmp/{file_name}')
 
 def load_table_from_gcs_to_bq():
-    bq = bigquery.Client(project=PROJECT_ID)
+    bq = bigquery.Client(project=PROJECT)
     dataset = bq.dataset(SOURCE_DATASET_ID)
 
     schema=[
@@ -90,8 +90,8 @@ with models.DAG(
     Transfer_data = BigQueryOperator(
         task_id='transfer_table_in_bq',
         sql='sql/main.sql',
-        params={'SOURCE_TABLE_NAME': f'{PROJECT_ID}.{SOURCE_DATASET_ID}.access-log-{day:%Y%m%d}',
-                'DWH_TABLE_NAME': f'{PROJECT_ID}.{DWH_DATASET_ID}.daily_pv',
+        params={'SOURCE_TABLE_NAME': f'{PROJECT}.{SOURCE_DATASET_ID}.access-log-{day:%Y%m%d}',
+                'DWH_TABLE_NAME': f'{PROJECT}.{DWH_DATASET_ID}.daily_pv',
                 'target_day': day}
     )
 
