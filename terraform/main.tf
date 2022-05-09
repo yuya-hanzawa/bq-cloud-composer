@@ -3,19 +3,19 @@ provider "google" {
   region  = var.REGION
 }
 
-resource "google_bigquery_dataset" "source_table" {
+resource "google_bigquery_dataset" "Create_Source_Table" {
   dataset_id  = var.SOURCE_DATASET_ID
   description = "アクセスログの外部テーブル"
   location    = "US"
 }
 
-resource "google_bigquery_dataset" "DWH_table" {
+resource "google_bigquery_dataset" "Create_DWH_Table" {
   dataset_id  = var.DWH_DATASET_ID
   description = "自作のホームページのアクセスログを集計するデータウェアハウス"
   location    = "US"
 }
 
-resource "google_composer_environment" "Create_Composer" {
+resource "google_composer_environment" "Create_Cloud_Composer" {
   name   = "hp-access-log"
   region = var.REGION
 
