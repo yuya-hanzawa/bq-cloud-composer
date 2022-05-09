@@ -16,11 +16,10 @@ resource "google_bigquery_dataset" "Create_DWH_Table" {
 }
 
 resource "google_composer_environment" "Create_Cloud_Composer" {
-  name   = "hp-access-log"
+  name   = "hp-access-log-composer"
   region = var.REGION
 
   config {
-    
     software_config {
       image_version = "composer-2.0.11-airflow-2.2.3"
 

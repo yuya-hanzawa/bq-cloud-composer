@@ -16,7 +16,7 @@ USERNAME          = models.Variable.get('USERNAME')
 PASSWORD          = models.Variable.get('PASSWORD')
 
 #day = datetime.datetime.now() - datetime.timedelta(days=1)
-day = datetime.date(2022, 5, 5)
+day = datetime.date(2022, 5, 5) # 今度消す
 file_name = f'access.log-{day:%Y%m%d}'
 
 def extract_file_from_server_to_gcs():
@@ -68,13 +68,14 @@ def load_table_from_gcs_to_bq():
     table = bq.create_table(table)
 
 default_dag_args = {
-    'start_date': datetime.datetime(2022, 4, 1),
-    'retries': 1,
+    'depends_on_past': False, # 今度消す
+    'start_date': day
 }
 
 with models.DAG(
     dag_id = 'HP-access-log',
     schedule_interval = None,
+    # schedule_interval = '0 12 0 0 0',
     default_args = default_dag_args) as dag:
 
     Extract_file = PythonOperator(
