@@ -4,7 +4,8 @@ CREATE OR REPLACE TABLE
 (
   day DATE,
   pv INT64
-) 
+)
+PARTITION BY day
 AS
   SELECT
     day,

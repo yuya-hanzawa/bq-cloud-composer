@@ -3,6 +3,12 @@ provider "google" {
   region  = var.REGION
 }
 
+resource "google_storage_bucket" "Create_GCS_For_Data_Source" {
+  name     = var.BUCKET
+  storage_class = "REGIONAL"
+  location = var.REGION
+}
+
 resource "google_bigquery_dataset" "Create_Source_Table" {
   dataset_id  = var.SOURCE_DATASET_ID
   description = "アクセスログの外部テーブル"
