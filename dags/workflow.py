@@ -7,13 +7,13 @@ from airflow import models
 from airflow.operators.python_operator import PythonOperator
 from airflow.contrib.operators.bigquery_operator import BigQueryOperator
 
-PROJECT        = models.Variable.get('PROJECT')
+PROJECT = models.Variable.get('PROJECT')
 SOURCE_DATASET_ID = models.Variable.get('SOURCE_DATASET_ID')
-DWH_DATASET_ID    = models.Variable.get('DWH_DATASET_ID')
-BUCKET            = models.Variable.get('BUCKET')
-SERVER_PORT       = models.Variable.get('SERVER_PORT')
-USERNAME          = models.Variable.get('USERNAME')
-PASSWORD          = models.Variable.get('PASSWORD')
+DWH_DATASET_ID = models.Variable.get('DWH_DATASET_ID')
+BUCKET = models.Variable.get('BUCKET')
+SERVER_PORT = models.Variable.get('SERVER_PORT')
+USERNAME = models.Variable.get('USERNAME')
+PASSWORD = models.Variable.get('PASSWORD')
 
 #day = datetime.datetime.now() - datetime.timedelta(days=1)
 day = datetime.date(2022, 5, 5) # 今度消す

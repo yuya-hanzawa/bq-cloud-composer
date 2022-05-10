@@ -34,13 +34,13 @@ resource "google_composer_environment" "Create_Cloud_Composer" {
         }
 
       env_variables = {
-        PROJECT           = var.PROJECT
-        BUCKET            = var.BUCKET
-        SERVER_PORT       = var.SERVER_PORT
-        USERNAME          = var.USERNAME
-        PASSWORD          = var.PASSWORD
+        PROJECT = var.PROJECT
+        BUCKET = var.BUCKET
+        SERVER_PORT = var.SERVER_PORT
+        USERNAME = var.USERNAME
+        PASSWORD = var.PASSWORD
         SOURCE_DATASET_ID = var.SOURCE_DATASET_ID
-        DWH_DATASET_ID    = var.DWH_DATASET_ID
+        DWH_DATASET_ID = var.DWH_DATASET_ID
         }
     }
 
