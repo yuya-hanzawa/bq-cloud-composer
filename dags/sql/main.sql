@@ -3,7 +3,7 @@ CREATE OR REPLACE TABLE
   `{{ params.DWH_TABLE_NAME }}`
 (
   day DATE,
-  pv INT64
+  pv INTEGER	
 )
 PARTITION BY day
 AS

@@ -31,17 +31,17 @@ resource "google_composer_environment" "Create_Cloud_Composer" {
 
       pypi_packages = {
         scp = "==0.14.1"
-        }
+      }
 
       env_variables = {
-        PROJECT = var.PROJECT
-        BUCKET = var.BUCKET
-        SERVER_PORT = var.SERVER_PORT
-        USERNAME = var.USERNAME
-        PASSWORD = var.PASSWORD
-        SOURCE_DATASET_ID = var.SOURCE_DATASET_ID
-        DWH_DATASET_ID = var.DWH_DATASET_ID
-        }
+        project_id        = var.PROJECT
+        bucket            = var.BUCKET
+        server_port       = var.SERVER_PORT
+        username          = var.USERNAME
+        password          = var.PASSWORD
+        source_dataset_id = var.SOURCE_DATASET
+        dwh_dataset_id    = var.DWH_DATASET
+      }
     }
 
     workloads_config {

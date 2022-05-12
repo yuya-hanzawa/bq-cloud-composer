@@ -1,3 +1,4 @@
+import os
 import datetime
 from paramiko import SSHClient, AutoAddPolicy
 from scp import SCPClient
@@ -7,16 +8,16 @@ from airflow import models
 from airflow.operators.python_operator import PythonOperator
 from airflow.contrib.operators.bigquery_operator import BigQueryOperator
 
-PROJECT = models.Variable.get('PROJECT')
-SOURCE_DATASET_ID = models.Variable.get('SOURCE_DATASET_ID')
-DWH_DATASET_ID = models.Variable.get('DWH_DATASET_ID')
-BUCKET = models.Variable.get('BUCKET')
-SERVER_PORT = models.Variable.get('SERVER_PORT')
-USERNAME = models.Variable.get('USERNAME')
-PASSWORD = models.Variable.get('PASSWORD')
+PROJECT_ID        = os.getenv('project_id')
+SOURCE_DATASET_ID = os.getenv('source_dataset_id')
+DWH_DATASET_ID    = os.getenv('dwh_dataset_id')
+BUCKET            = os.getenv('bucket')
+SERVER_PORT       = os.getenv('server_port')
+USERNAME          = os.getenv('username')
+PASSWORD          = os.getenv('password')
 
 #day = datetime.datetime.now() - datetime.timedelta(days=1)
-day = datetime.date(2022, 5, 5) # 今度消す
+day = datetime.date(2022, 5, 10) # 今度消す
 file_name = f'access.log-{day:%Y%m%d}'
 
 def extract_file_from_server_to_gcs():
@@ -32,13 +33,13 @@ def extract_file_from_server_to_gcs():
         with SCPClient(ssh.get_transport()) as scp:
             scp.get(f'/var/log/nginx/{file_name}', '/tmp/')
 
-    gcs = storage.Client(PROJECT)
+    gcs = storage.Client(PROJECT_ID)
     bucket = gcs.get_bucket(BUCKET)
     blob = bucket.blob(file_name)
     blob.upload_from_filename(f'/tmp/{file_name}')
 
 def load_table_from_gcs_to_bq():
-    bq = bigquery.Client(project=PROJECT)
+    bq = bigquery.Client(project=PROJECT_ID)
     dataset = bq.dataset(SOURCE_DATASET_ID)
 
     schema=[
@@ -69,7 +70,7 @@ def load_table_from_gcs_to_bq():
 
 default_dag_args = {
     'depends_on_past': False, # 今度消す
-    'start_date': day
+    'start_date': '2022-05-09'
 }
 
 with models.DAG(
@@ -91,8 +92,8 @@ with models.DAG(
     Transfer_data = BigQueryOperator(
         task_id='transfer_table_in_bq',
         sql='sql/main.sql',
-        params={'SOURCE_TABLE_NAME': f'{PROJECT}.{SOURCE_DATASET_ID}.access-log-{day:%Y%m%d}',
-                'DWH_TABLE_NAME': f'{PROJECT}.{DWH_DATASET_ID}.daily_pv',
+        params={'SOURCE_TABLE_NAME': f'{PROJECT_ID}.{SOURCE_DATASET_ID}.HP-access-log-{day:%Y%m%d}',
+                'DWH_TABLE_NAME': f'{PROJECT_ID}.{DWH_DATASET_ID}.daily_pv',
                 'TARGET_DAY': day}
     )
 
