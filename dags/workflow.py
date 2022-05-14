@@ -16,8 +16,7 @@ SERVER_PORT       = os.getenv('server_port')
 USERNAME          = os.getenv('username')
 PASSWORD          = os.getenv('password')
 
-#day = datetime.datetime.now() - datetime.timedelta(days=1)
-day = datetime.date(2022, 5, 10) # 今度消す
+day = (datetime.datetime.now() - datetime.timedelta(days=1)).date()
 file_name = f'access.log-{day:%Y%m%d}'
 
 def extract_file_from_server_to_gcs():
@@ -70,13 +69,13 @@ def load_table_from_gcs_to_bq():
 
 default_dag_args = {
     'depends_on_past': False, # 今度消す
-    'start_date': '2022-05-09'
+    'start_date': '2022-05-12'
 }
 
 with models.DAG(
     dag_id = 'HP-access-log',
-    schedule_interval = None,
-    # schedule_interval = '0 12 0 0 0',
+    schedule_interval = '0 12 0 0 0',
+    catchup = False,
     default_args = default_dag_args) as dag:
 
     Extract_file = PythonOperator(
@@ -94,7 +93,8 @@ with models.DAG(
         sql='sql/main.sql',
         params={'SOURCE_TABLE_NAME': f'{PROJECT_ID}.{SOURCE_DATASET_ID}.HP-access-log-{day:%Y%m%d}',
                 'DWH_TABLE_NAME': f'{PROJECT_ID}.{DWH_DATASET_ID}.daily_pv',
-                'TARGET_DAY': day}
+                'TARGET_DAY': day},
+        use_legacy_sql=False
     )
 
     Extract_file >> Load_table >> Transfer_data

@@ -1,5 +1,5 @@
 provider "google" {
-  project = var.PROJECT
+  project = var.PROJECT_ID
   region  = var.REGION
 }
 
@@ -34,13 +34,13 @@ resource "google_composer_environment" "Create_Cloud_Composer" {
       }
 
       env_variables = {
-        project_id        = var.PROJECT
+        project_id        = var.PROJECT_ID
         bucket            = var.BUCKET
         server_port       = var.SERVER_PORT
         username          = var.USERNAME
         password          = var.PASSWORD
-        source_dataset_id = var.SOURCE_DATASET
-        dwh_dataset_id    = var.DWH_DATASET
+        source_dataset_id = var.SOURCE_DATASET_ID
+        dwh_dataset_id    = var.DWH_DATASET_ID
       }
     }
 
