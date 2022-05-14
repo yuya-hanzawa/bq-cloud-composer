@@ -68,8 +68,9 @@ def load_table_from_gcs_to_bq():
     table = bq.create_table(table)
 
 default_dag_args = {
-    'depends_on_past': False, # 今度消す
-    'start_date': '2022-05-12'
+    'start_date': f'{day:%Y-%m-%d}',
+    'depends_on_past': True,
+    'wait_for_downstream': True
 }
 
 with models.DAG(
