@@ -27,7 +27,7 @@ def extract_file_from_server_to_gcs():
                     port=SERVER_PORT, 
                     username=USERNAME,
                     password=PASSWORD
-                    )
+        )
     
         with SCPClient(ssh.get_transport()) as scp:
             scp.get(f'/var/log/nginx/{file_name}', '/tmp/')
