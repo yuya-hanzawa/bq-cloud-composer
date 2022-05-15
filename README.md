@@ -2,14 +2,14 @@
 
 # 目的
 Google Cloud Platformのサービスの1つであるCloud Composerを練習する。</br>
-以前作成したETLパイプライン (https://github.com/zawa1120/bq-access-log) をCloud Composerで再現する。</br>
+以前作成したETLパイプライン ( https://github.com/zawa1120/bq-access-log ) をCloud Composerで再現する。</br>
 Cloud ComposerはKubernentesエンジンで動いているため、莫大な費用がかかる。今回作成したパイプラインはテストのために数日間動かし、停止する。ログ集めは引き続き以前作成したパイプラインを運用する。
 
 # ワークフロー
 ![cloudcomposer](https://user-images.githubusercontent.com/58725085/168479731-ffea5bb3-98fc-4204-a3ed-0e12229cf590.png)
 
 # 学んだこと
-1. Cloud Composerの基本的なことを手を動かしながら理解することができた。
+1. Cloud Composerの基本を手を動かしながら理解することができた。
 2. Airflowに設定した環境変数とCloud Compoeserに設定した環境変数でそれぞれ取得方法が違う。具体的にどのように設定されているか調査が必要。そのためにもCloud Composerのアーキテクチャーを完全に理解するがありそう。
 3. DAGのstart_dateとexecution_dateとschedule_intervalの関係性を手を動かしながら理解することができた。
 4. SQL上で変数を扱う方法を学んだ。use_legacy_sqlのパラメーターをFalseに指定することでStandardSQLを使用することができる。( SQLの最初の行に#standardSQLを記入しているがstandardsqlが使用されていない？ 要調査 )
