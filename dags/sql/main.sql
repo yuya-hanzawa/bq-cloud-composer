@@ -5,7 +5,7 @@ CREATE OR REPLACE TABLE
   executed_date DATE,
   pv INTEGER	
 )
-PARTITION BY day
+PARTITION BY executed_date
 AS
   SELECT
     executed_date,

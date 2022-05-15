@@ -1,5 +1,5 @@
 import os
-import datetime
+from datetime import datetime, timedelta, timezone
 from paramiko import SSHClient, AutoAddPolicy
 from scp import SCPClient
 from google.cloud import bigquery
@@ -16,7 +16,8 @@ SERVER_PORT       = os.getenv('server_port')
 USERNAME          = os.getenv('username')
 PASSWORD          = os.getenv('password')
 
-day = (datetime.datetime.now() - datetime.timedelta(days=1)).date()
+JST = timezone(timedelta(hours=+9), 'JST')
+day = (datetime.now(JST) - timedelta(days=1)).date()
 file_name = f'access.log-{day:%Y%m%d}'
 
 def extract_file_from_server_to_gcs():
@@ -68,14 +69,14 @@ def load_table_from_gcs_to_bq():
     table = bq.create_table(table)
 
 default_dag_args = {
-    'start_date': '2022-05-15',
+    'start_date': '2022-05-14',
     'depends_on_past': True,
     'wait_for_downstream': True
 }
 
 with models.DAG(
     dag_id = 'HP-access-log',
-    schedule_interval = '0 15 0 0 0',
+    schedule_interval = '0 3 * * *',
     default_args = default_dag_args) as dag:
 
     Extract_file = PythonOperator(
