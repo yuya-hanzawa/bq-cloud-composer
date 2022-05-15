@@ -69,7 +69,7 @@ def load_table_from_gcs_to_bq():
     table = bq.create_table(table)
 
 default_dag_args = {
-    'start_date': '2022-05-14',
+    'start_date': '2022-05-15',
     'depends_on_past': True,
     'wait_for_downstream': True
 }
