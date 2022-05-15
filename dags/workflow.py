@@ -68,15 +68,14 @@ def load_table_from_gcs_to_bq():
     table = bq.create_table(table)
 
 default_dag_args = {
-    'start_date': f'{day:%Y-%m-%d}',
+    'start_date': '2022-05-15',
     'depends_on_past': True,
     'wait_for_downstream': True
 }
 
 with models.DAG(
     dag_id = 'HP-access-log',
-    schedule_interval = '0 12 0 0 0',
-    catchup = False,
+    schedule_interval = '0 15 0 0 0',
     default_args = default_dag_args) as dag:
 
     Extract_file = PythonOperator(
