@@ -3,7 +3,7 @@
 # 目的
 Google Cloud Platformのサービスの1つであるCloud Composerを練習する。</br>
 以前作成したETLパイプライン ( https://github.com/zawa1120/bq-access-log ) をCloud Composerで再現する。</br>
-Cloud ComposerはKubernentesエンジンで動いているため、莫大な費用がかかる。今回作成したパイプラインはテストのために数日間動かし、停止する。ログ集めは引き続き以前作成したパイプラインを運用する。
+Cloud ComposerはKubernentesエンジンで動いているため、莫大な費用がかかる。今回作成したパイプラインはテストのために数日間動かし、その後は停止する。ログ収集は引き続き以前作成したパイプラインを運用する。
 
 # ワークフロー
 ![cloudcomposer](https://user-images.githubusercontent.com/58725085/168479731-ffea5bb3-98fc-4204-a3ed-0e12229cf590.png)
