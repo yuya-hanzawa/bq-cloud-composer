@@ -10,7 +10,7 @@ resource "google_storage_bucket" "Create_GCS_For_Data_Lake" {
 }
 
 resource "google_bigquery_dataset" "Create_Lake_Table" {
-  dataset_id  = var.SOURCE_DATASET_ID
+  dataset_id  = var.LAKE_DATASET_ID
   description = "アクセスログの外部テーブル"
   location    = "US"
 }
@@ -39,7 +39,7 @@ resource "google_composer_environment" "Create_Cloud_Composer" {
         server_port       = var.SERVER_PORT
         username          = var.USERNAME
         password          = var.PASSWORD
-        source_dataset_id = var.SOURCE_DATASET_ID
+        source_dataset_id = var.LAKE_DATASET_ID
         dwh_dataset_id    = var.DWH_DATASET_ID
       }
     }
