@@ -3,14 +3,14 @@ provider "google" {
   region  = var.REGION
 }
 
-resource "google_storage_bucket" "Create_GCS_For_Data_Lake" {
+resource "google_storage_bucket" "Create_GCS_For_External_Table" {
   name     = var.BUCKET
   storage_class = "REGIONAL"
   location = var.REGION
 }
 
-resource "google_bigquery_dataset" "Create_Lake_Table" {
-  dataset_id  = var.LAKE_DATASET_ID
+resource "google_bigquery_dataset" "Create_External_Table" {
+  dataset_id  = var.EXTERNAL_DATASET_ID
   description = "アクセスログの外部テーブル"
   location    = "US"
 }
@@ -34,13 +34,13 @@ resource "google_composer_environment" "Create_Cloud_Composer" {
       }
 
       env_variables = {
-        project_id        = var.PROJECT_ID
-        bucket            = var.BUCKET
-        server_port       = var.SERVER_PORT
-        username          = var.USERNAME
-        password          = var.PASSWORD
-        source_dataset_id = var.LAKE_DATASET_ID
-        dwh_dataset_id    = var.DWH_DATASET_ID
+        project_id          = var.PROJECT_ID
+        bucket              = var.BUCKET
+        server_port         = var.SERVER_PORT
+        username            = var.USERNAME
+        password            = var.PASSWORD
+        external_dataset_id = var.EXTERNAL_DATASET_ID
+        dwh_dataset_id      = var.DWH_DATASET_ID
       }
     }
 

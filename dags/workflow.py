@@ -8,16 +8,16 @@ from airflow import models
 from airflow.operators.python_operator import PythonOperator
 from airflow.contrib.operators.bigquery_operator import BigQueryOperator
 
-PROJECT_ID      = os.environ['project_id']
-LAKE_DATASET_ID = os.environ['lake_dataset_id']
-DWH_DATASET_ID  = os.environ['dwh_dataset_id']
-BUCKET          = os.environ['bucket']
-SERVER_PORT     = os.environ['server_port']
-USERNAME        = os.environ['username']
-PASSWORD        = os.environ['password']
+PROJECT_ID          = os.environ['project_id']
+EXTERNAL_DATASET_ID = os.environ['external_dataset_id']
+DWH_DATASET_ID      = os.environ['dwh_dataset_id']
+BUCKET              = os.environ['bucket']
+SERVER_PORT         = os.environ['server_port']
+USERNAME            = os.environ['username']
+PASSWORD            = os.environ['password']
 
-JST = timezone(timedelta(hours=+9), 'JST')
-day = (datetime.now(JST) - timedelta(days=1)).date()
+jst = timezone(timedelta(hours=+9), 'JST')
+day = (datetime.now(jst) - timedelta(days=1)).date()
 file_name = f'access.log-{day:%Y%m%d}'
 
 def extract_file_from_server_to_gcs():
@@ -40,7 +40,7 @@ def extract_file_from_server_to_gcs():
 
 def load_table_from_gcs_to_bq():
     bq = bigquery.Client(project=PROJECT_ID)
-    dataset = bq.dataset(LAKE_DATASET_ID)
+    dataset = bq.dataset(EXTERNAL_DATASET_ID)
 
     schema=[
         bigquery.SchemaField("time", "STRING", mode='NULLABLE', description='標準フォーマットのローカルタイム'),
@@ -92,7 +92,7 @@ with models.DAG(
     Transfer_data = BigQueryOperator(
         task_id='transfer_table_in_bq',
         sql='sql/main.sql',
-        params={'LAKE_TABLE_NAME': f'{PROJECT_ID}.{LAKE_DATASET_ID}.HP-access-log-{day:%Y%m%d}',
+        params={'EXTERNAL_TABLE_NAME': f'{PROJECT_ID}.{EXTERNAL_DATASET_ID}.HP-access-log-{day:%Y%m%d}',
                 'DWH_TABLE_NAME': f'{PROJECT_ID}.{DWH_DATASET_ID}.daily_pv',
                 'TARGET_DAY': day},
         use_legacy_sql=False

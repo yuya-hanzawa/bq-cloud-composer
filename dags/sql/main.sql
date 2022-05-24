@@ -17,4 +17,4 @@ AS
     DATE('{{ params.TARGET_DAY }}') executed_date,
     COUNT(time) pv
   FROM
-    `{{ params.LAKE_TABLE_NAME }}`
+    `{{ params.EXTERNAL_TABLE_NAME }}`
