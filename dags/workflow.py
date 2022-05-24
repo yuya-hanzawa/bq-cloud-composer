@@ -8,13 +8,13 @@ from airflow import models
 from airflow.operators.python_operator import PythonOperator
 from airflow.contrib.operators.bigquery_operator import BigQueryOperator
 
-PROJECT_ID        = os.environ['project_id']
-LAKE_DATASET_ID   = os.environ['lake_dataset_id']
-DWH_DATASET_ID    = os.environ['dwh_dataset_id']
-BUCKET            = os.environ['bucket']
-SERVER_PORT       = os.environ['server_port']
-USERNAME          = os.environ['username']
-PASSWORD          = os.environ['password']
+PROJECT_ID      = os.environ['project_id']
+LAKE_DATASET_ID = os.environ['lake_dataset_id']
+DWH_DATASET_ID  = os.environ['dwh_dataset_id']
+BUCKET          = os.environ['bucket']
+SERVER_PORT     = os.environ['server_port']
+USERNAME        = os.environ['username']
+PASSWORD        = os.environ['password']
 
 JST = timezone(timedelta(hours=+9), 'JST')
 day = (datetime.now(JST) - timedelta(days=1)).date()
