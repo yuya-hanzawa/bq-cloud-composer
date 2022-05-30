@@ -10,10 +10,17 @@ Cloud ComposerはKubernentesエンジンで動いているため、莫大な費�
 
 
 # 学んだこと
-1. Cloud Composerの基本を手を動かしながら理解することができた。
-2. Airflowに設定した環境変数とCloud Compoeserに設定した環境変数でそれぞれ取得方法が違う。具体的にどのように設定されているか調査が必要。そのためにもCloud Composerのアーキテクチャーを理解する必要がありそう。
+1. Cloud Composerの基礎を手を動かしながら理解することができた。
+2. Airflowに設定した環境変数とCloud Compoeserに設定した環境変数でそれぞれ取得方法が違う。具体的にどのように設定されているか調査が必要。そのためにもCloud Composerのアーキテクチャーを理解する必要がある。
 3. DAGのstart_dateとexecution_dateとschedule_intervalの関係性を手を動かしながら理解することができた。
 4. SQL上で変数を扱う方法を学んだ。use_legacy_sqlのパラメーターをFalseに指定することでStandardSQLを使用することができる。( SQLの最初の行に#standardSQLを記入しているがstandardsqlが使用されていない？ 要調査 )
+
+# 試したこと
+1. SSHOperatorとgsutilコマンドでログファイルを直接バケットに転送しようとした。しかし、rootユーザー以外にGCP関連のコマンドを使用させたくなかったのでこれを実現することが難しいと判断した。<br>
+下記のコマンドを試してみたが、先にgsutilの部分が展開され、コマンドが見つかりませんとエラーを吐いてしまう。他に良い方法が見つかり次第、移行も検討する。
+```
+echo "パスワード" | sudo -S gsutil cp ファイル名 gs://バケット名
+```
 
 # 環境
 
