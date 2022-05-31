@@ -21,7 +21,7 @@ Cloud ComposerはKubernentesエンジンで動いているため、莫大な費�
 ```
 echo "パスワード" | sudo -S gsutil cp ファイル名 gs://バケット名
 ```
-よく見たらgsutilがエイリアスとして設定されていた。gsutilのシンボリックリンクを貼り替えるか、コマンドのファイルを直接指定することで回避することができた。
+よく確認したらgsutilがエイリアスとして設定されていた。shellはエイリアスを子プロセスにまで適用しない。gsutil以降は子プロセスになるため、gsutilのシンボリックリンクを貼り替えるか、コマンドのファイルを直接指定することで回避することができる。
 ```
 echo "パスワード" | sudo -S /root/google-cloud-sdk/bin/gsutil cp ファイル名 gs://バケット名
 ```
