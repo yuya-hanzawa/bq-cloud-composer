@@ -4,9 +4,9 @@ provider "google" {
 }
 
 resource "google_storage_bucket" "Create_GCS_For_External_Table" {
-  name     = var.BUCKET
+  name          = var.BUCKET
   storage_class = "REGIONAL"
-  location = var.REGION
+  location      = var.REGION
 }
 
 resource "google_bigquery_dataset" "Create_External_Table" {
