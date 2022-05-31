@@ -1,12 +1,14 @@
 import os
 from datetime import datetime, timedelta, timezone
-from paramiko import SSHClient, AutoAddPolicy
-from scp import SCPClient
+#from paramiko import SSHClient, AutoAddPolicy
+#from scp import SCPClient
 from google.cloud import bigquery
-from google.cloud import storage
+#from google.cloud import storage
 from airflow import models
 from airflow.operators.python_operator import PythonOperator
 from airflow.contrib.operators.bigquery_operator import BigQueryOperator
+from airflow.contrib.operators.ssh_operator import SSHOperator
+from airflow.contrib.hooks.ssh_hook import SSHHook
 
 PROJECT_ID          = os.environ['project_id']
 EXTERNAL_DATASET_ID = os.environ['external_dataset_id']
@@ -14,29 +16,30 @@ DWH_DATASET_ID      = os.environ['dwh_dataset_id']
 BUCKET              = os.environ['bucket']
 SERVER_PORT         = os.environ['server_port']
 USERNAME            = os.environ['username']
-PASSWORD            = os.environ['password']
+ROOT_PASSWORD       = os.environ['root_password']
+SSH_PASSWORD        = os.environ['ssh_password']
 
 jst = timezone(timedelta(hours=+9), 'JST')
 day = (datetime.now(jst) - timedelta(days=1)).date()
 file_name = f'access.log-{day:%Y%m%d}'
 
-def extract_file_from_server_to_gcs():
-    with SSHClient() as ssh:
-        ssh.set_missing_host_key_policy(AutoAddPolicy())
-
-        ssh.connect(hostname='yuya-hanzawa.com', 
-                    port=SERVER_PORT, 
-                    username=USERNAME,
-                    password=PASSWORD
-        )
-    
-        with SCPClient(ssh.get_transport()) as scp:
-            scp.get(f'/var/log/nginx/{file_name}', '/tmp/')
-
-    gcs = storage.Client(PROJECT_ID)
-    bucket = gcs.get_bucket(BUCKET)
-    blob = bucket.blob(file_name)
-    blob.upload_from_filename(f'/tmp/{file_name}')
+#def extract_file_from_server_to_gcs():
+#    with SSHClient() as ssh:
+#        ssh.set_missing_host_key_policy(AutoAddPolicy())
+#
+#        ssh.connect(hostname='yuya-hanzawa.com', 
+#                    port=SERVER_PORT, 
+#                    username=USERNAME,
+#                    password=PASSWORD
+#        )
+#    
+#        with SCPClient(ssh.get_transport()) as scp:
+#            scp.get(f'/var/log/nginx/{file_name}', '/tmp/')
+#
+#    gcs = storage.Client(PROJECT_ID)
+#    bucket = gcs.get_bucket(BUCKET)
+#    blob = bucket.blob(file_name)
+#    blob.upload_from_filename(f'/tmp/{file_name}')
 
 def load_table_from_gcs_to_bq():
     bq = bigquery.Client(project=PROJECT_ID)
@@ -69,7 +72,7 @@ def load_table_from_gcs_to_bq():
     table = bq.create_table(table)
 
 default_dag_args = {
-    'start_date': '2022-05-15',
+    'start_date': '2022-05-30',
     'depends_on_past': True,
     'wait_for_downstream': True
 }
@@ -79,9 +82,20 @@ with models.DAG(
     schedule_interval = '0 3 * * *',
     default_args = default_dag_args) as dag:
 
-    Extract_file = PythonOperator(
+    #Extract_file = PythonOperator(
+    #    task_id='extract_file_from_server_to_gcs',
+    #    python_callable=extract_file_from_server_to_gcs
+    #)
+
+    Extract_file = SSHOperator(
         task_id='extract_file_from_server_to_gcs',
-        python_callable=extract_file_from_server_to_gcs
+        ssh_hook=SSHHook(
+            remote_host='yuya-hanzawa.com',
+            username=USERNAME,
+            password=SSH_PASSWORD,
+            port=SERVER_PORT
+            ),
+        command=f'echo {ROOT_PASSWORD} | sudo -S /root/google-cloud-sdk/bin/gsutil cp /var/log/nginx/{file_name} gs://{BUCKET}',
     )
 
     Load_table = PythonOperator(

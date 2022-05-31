@@ -38,7 +38,8 @@ resource "google_composer_environment" "Create_Cloud_Composer" {
         bucket              = var.BUCKET
         server_port         = var.SERVER_PORT
         username            = var.USERNAME
-        password            = var.PASSWORD
+        root_password       = var.ROOT_PASSWORD
+        ssh_password        = var.SSH_PASSWORD
         external_dataset_id = var.EXTERNAL_DATASET_ID
         dwh_dataset_id      = var.DWH_DATASET_ID
       }
