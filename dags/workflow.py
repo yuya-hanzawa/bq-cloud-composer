@@ -1,14 +1,15 @@
 import os
 from datetime import datetime, timedelta, timezone
-#from paramiko import SSHClient, AutoAddPolicy
-#from scp import SCPClient
 from google.cloud import bigquery
-#from google.cloud import storage
 from airflow import models
 from airflow.operators.python_operator import PythonOperator
 from airflow.contrib.operators.bigquery_operator import BigQueryOperator
 from airflow.contrib.operators.ssh_operator import SSHOperator
 from airflow.contrib.hooks.ssh_hook import SSHHook
+
+#from paramiko import SSHClient, AutoAddPolicy
+#from scp import SCPClient
+#from google.cloud import storage
 
 PROJECT_ID          = os.environ['project_id']
 EXTERNAL_DATASET_ID = os.environ['external_dataset_id']
