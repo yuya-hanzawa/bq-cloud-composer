@@ -1,0 +1,10 @@
+variable "BUCKET" {}
+variable "REGION" {}
+variable "EXTERNAL_DATASET_ID" {}
+variable "DWH_DATASET_ID" {}
+variable "PROJECT_ID" {}
+variable "SERVER_PORT" {}
+variable "USERNAME" {}
+variable "ROOT_PASSWORD" {}
+variable "SSH_PASSWORD" {}
+variable "SERVICE_ACCOUNT" {}

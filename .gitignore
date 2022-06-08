@@ -1,5 +1,5 @@
 .DS_Store
-terraform/variable.tf
+terraform/variables.tf
 memo.txt
 terraform/gcp
 terraform/terraform.tfstate
