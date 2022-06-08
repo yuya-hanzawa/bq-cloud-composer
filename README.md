@@ -9,7 +9,7 @@ Cloud ComposerはKubernentesエンジンで動いているため、莫大な費�
 ![composer](https://user-images.githubusercontent.com/58725085/169956198-d511bd5a-f48b-4f12-9053-55481e63c3de.png)
 
 
-# 学んだこと
+# 学んだこと&発見
 1. Cloud Composerの基礎を手を動かしながら理解することができた。
 2. Airflowに設定した環境変数とCloud Compoeserに設定した環境変数でそれぞれ取得方法が違う。具体的にどのように設定されているか調査が必要。そのためにもCloud Composerのアーキテクチャーを理解する必要がある。
 3. DAGのstart_dateとexecution_dateとschedule_intervalの関係性を手を動かしながら理解することができた。
